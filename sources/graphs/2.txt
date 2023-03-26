@@ -1,0 +1,102 @@
+1:
+2:
+
+Acyclic: Yes
+Algebraic Connectivity: 0
+Average Degree: 0
+Bipartite: Yes
+Chromatic Index: 0
+Chromatic Number: 1
+Circumference: undefined
+Claw-Free: Yes
+Clique Number: 1
+Connected: No
+Density: 0
+Diameter: infinity
+Domination Number: 2
+Edge Connectivity: 0
+Eulerian: No
+Genus: undefined
+Girth: undefined
+Group Size: 2
+Hamiltonian: No
+Hypohamiltonian: No
+Hypotraceable: No
+Independence Number: 2
+Index: 0
+Laplacian Largest Eigenvalue: 0
+Longest Induced Cycle: undefined
+Longest Induced Path: 0
+Matching Number: 0
+Maximum Degree: 0
+Minimum Degree: 0
+Number of Components: 2
+Number of Edges: 0
+Number of Spanning Trees: 0
+Number of Triangles: 0
+Number of Vertex Orbits: 1
+Number of Vertices: 2
+Number of Zero Eigenvalues: 2
+Planar: Yes
+Radius: undefined
+Regular: Yes
+Second Largest Eigenvalue: 0
+Smallest Eigenvalue: 0
+Traceable: No
+Treewidth: 0
+Vertex Connectivity: 0
+Vertex Cover Number: 0
+
+
+
+1: 2
+2: 1
+
+Acyclic: Yes
+Algebraic Connectivity: 2
+Average Degree: 1
+Bipartite: Yes
+Chromatic Index: 1
+Chromatic Number: 2
+Circumference: undefined
+Claw-Free: Yes
+Clique Number: 2
+Connected: Yes
+Density: 1
+Diameter: 1
+Domination Number: 1
+Edge Connectivity: 1
+Eulerian: No
+Genus: 0
+Girth: undefined
+Group Size: 2
+Hamiltonian: No
+Hypohamiltonian: No
+Hypotraceable: No
+Independence Number: 1
+Index: 1
+Laplacian Largest Eigenvalue: 2
+Longest Induced Cycle: undefined
+Longest Induced Path: 1
+Matching Number: 1
+Maximum Degree: 1
+Minimum Degree: 1
+Number of Components: 1
+Number of Edges: 1
+Number of Spanning Trees: 1
+Number of Triangles: 0
+Number of Vertex Orbits: 1
+Number of Vertices: 2
+Number of Zero Eigenvalues: 0
+Planar: Yes
+Radius: 1
+Regular: Yes
+Second Largest Eigenvalue: -1
+Smallest Eigenvalue: -1
+Traceable: Yes
+Treewidth: 1
+Vertex Connectivity: 1
+Vertex Cover Number: 1
+
+
+

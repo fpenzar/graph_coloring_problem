@@ -1,0 +1,50 @@
+1:
+
+Acyclic: Yes
+Algebraic Connectivity: undefined
+Average Degree: 0
+Bipartite: Yes
+Chromatic Index: undefined
+Chromatic Number: 1
+Circumference: undefined
+Claw-Free: Yes
+Clique Number: 1
+Connected: Yes
+Density: undefined
+Diameter: 0
+Domination Number: 1
+Edge Connectivity: 0
+Eulerian: Yes
+Genus: 0
+Girth: undefined
+Group Size: 1
+Hamiltonian: No
+Hypohamiltonian: No
+Hypotraceable: No
+Independence Number: 1
+Index: 0
+Laplacian Largest Eigenvalue: 0
+Longest Induced Cycle: undefined
+Longest Induced Path: 0
+Matching Number: 0
+Maximum Degree: 0
+Minimum Degree: 0
+Number of Components: 1
+Number of Edges: 0
+Number of Spanning Trees: 1
+Number of Triangles: 0
+Number of Vertex Orbits: 1
+Number of Vertices: 1
+Number of Zero Eigenvalues: 1
+Planar: Yes
+Radius: 0
+Regular: Yes
+Second Largest Eigenvalue: undefined
+Smallest Eigenvalue: 0
+Traceable: No
+Treewidth: 0
+Vertex Connectivity: 0
+Vertex Cover Number: 0
+
+
+

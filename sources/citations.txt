@@ -1,0 +1,1 @@
+K. Coolsaet, S. D'hondt and J. Goedgebeur, House of Graphs 2.0: a database of interesting graphs and more, Discrete Applied Mathematics, 325:97-107, 2023. Available at https://houseofgraphs.org
