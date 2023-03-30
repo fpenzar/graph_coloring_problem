@@ -22,12 +22,14 @@ class Parser:
                         self.graphs.append(Graph(adjacency_list, 
                                                  chromatic_number, 
                                                  max_degree,
-                                                 number_of_edges))
+                                                 number_of_edges,
+                                                 number_of_vertices))
                     initial = False
                     adjacency_list = {}
                     max_degree = None
                     chromatic_number = None
                     number_of_edges = None
+                    number_of_vertices = None
                 key = line.split(":")[0]
                 values = line.split(":")[1]
                 # graph definition
@@ -50,6 +52,9 @@ class Parser:
                     continue
                 if key == "Number of Edges":
                     number_of_edges = int(values)
+                    continue
+                if key == "Number of Vertices":
+                    number_of_vertices = int(values)
                     continue
     
 

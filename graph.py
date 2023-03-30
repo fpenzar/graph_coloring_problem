@@ -1,10 +1,11 @@
 class Graph:
 
-    def __init__(self, adjacency_list, chromatic_number, maximum_degree, number_of_edges):
+    def __init__(self, adjacency_list, chromatic_number, maximum_degree, number_of_edges, number_of_vertices):
         self.adjacency_list = adjacency_list
         self.chromatic_number = chromatic_number
         self.maximum_degree = maximum_degree
         self.number_of_edges = number_of_edges
+        self.number_of_vertices = number_of_vertices
     
 
     def max_fitness(self):
