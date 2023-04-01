@@ -2,4 +2,9 @@ Rješavanje problema bojanja grafa evolucijskim algoritmom
 
 Solving graph coloring problem using evolutionary algorithm
 
-Definirati problem bojanja grafa s minimalnim brojem boja. Opisati evolucijski algoritam prilagođen rješavanju specifičnog problema bojanja grafova. Programski ostvariti programski sustav za rješavanje problema bojanja grafova uz pomoć evolucijskog algoritma s jednostavnim korisničkim sučeljem koristeći slobodno dostupne knjižnice programa. Ispitati rad evolucijskog algoritma na nekoliko problema bojanja grafova. Eksperimentalno utvrditi skup parametara genetskog algoritma koji nasumično odabire genetske operatore. Uz rad priložiti izvorne tekstove programa i citirati korištenu literaturu.
+Definirati problem bojanja grafa s minimalnim brojem boja. 
+Opisati evolucijski algoritam prilagođen rješavanju specifičnog problema bojanja grafova.
+Programski ostvariti programski sustav za rješavanje problema bojanja grafova uz pomoć evolucijskog algoritma s jednostavnim korisničkim sučeljem koristeći slobodno dostupne knjižnice programa.
+Ispitati rad evolucijskog algoritma na nekoliko problema bojanja grafova.
+Eksperimentalno utvrditi skup parametara genetskog algoritma koji nasumično odabire genetske operatore.
+Uz rad priložiti izvorne tekstove programa i citirati korištenu literaturu.
