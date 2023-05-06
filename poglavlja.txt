@@ -1,0 +1,6 @@
+1) koristena literatura summary njihovog istrazivanja
+2) kromatski broj grafa, problem, primjene
+3) evolucijski algoritmi opcenito, genetski algoritmi
+4) opis prakticnog dijela (koristeni kod, kako zasto)
+5) diskusija rezultata prakticnog dijela rada
+6) zakljucak - ali naglasak na ovom mome prakticnom dijelu

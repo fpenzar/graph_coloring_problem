@@ -4,7 +4,7 @@ import random
 import time
 import sys
 
-INPUT_FILE = "/home/filip/Work/FER/6_semestar/zavrsni_rad/sources/graphs/200_249.txt"
+INPUT_FILE = "/home/filip/Work/FER/6_semestar/zavrsni_rad/sources/graphs/test_file.txt"
 
 
 def print_graph_score(chromatic_number, k_found, starting_number, num_vertices, num_edges):
@@ -26,15 +26,7 @@ def print_total_score(scores, total):
     print(f"[ERROR >= 4]    off_by_four_or_more / total     = {scores[4]} / {total} ({round(scores[4]*100/total, 2)}%)")
 
 
-
-if __name__ == "__main__":
-    random.seed(time.time())
-
-    if len(sys.argv) == 2:
-        input_file = sys.argv[1]
-    else:
-        input_file = INPUT_FILE
-
+def genetic_search(input_file, draw_colored_graph):
     parser = Parser(input_file)
     parser.parse()
     # keeps track of how many graphs were off by how much from the real chr num
@@ -99,17 +91,64 @@ if __name__ == "__main__":
                             new_color = random.choice(available_colors)
                         chromosome[vertex] = new_color
             return offspring
+        
+
+        def mutation_func_random_change_on_bad_vertices(offspring, ga_instance: pygad.GA):
+            for chromosome in offspring:
+                for vertex, color in enumerate(chromosome):
+                    # check if the current vertex shares a color with its neighbour
+                    new_color_needed = False
+                    for adjacent_vertice in graph.adjacency_list[vertex]:
+                        if color == chromosome[adjacent_vertice]:
+                            new_color_needed = True
+                            break
+                    if not new_color_needed:
+                        continue
+                    new_color = random.randint(ga_instance.init_range_low, ga_instance.init_range_high)
+                    chromosome[vertex] = new_color
+            return offspring
+        
+
+        def mutation_func_targeted_change_on_bad_vertices(offspring, ga_instance: pygad.GA):
+            for chromosome in offspring:
+                for vertex, color in enumerate(chromosome):
+                    # check if the current vertex shares a color with its neighbour
+                    new_color_needed = False
+                    adjacent_colors = set()
+                    for adjacent_vertice in graph.adjacency_list[vertex]:
+                        adjacent_colors.add(chromosome[adjacent_vertice])
+                        if color == chromosome[adjacent_vertice]:
+                            new_color_needed = True
+                    if not new_color_needed:
+                        continue
+                    # if number of different adjacent colors is the same as the total number of colors -> choose a random color
+                    if len(adjacent_colors) == ga_instance.init_range_high:
+                        new_color = random.randint(ga_instance.init_range_low, ga_instance.init_range_high)
+                    # otherwise choose a color that does not match any of the adjacent colors
+                    else:
+                        available_colors = []
+                        for possible_color in range(ga_instance.init_range_low, ga_instance.init_range_high + 1):
+                            if possible_color not in adjacent_colors:
+                                available_colors.append(possible_color)
+                        new_color = random.choice(available_colors)
+                    chromosome[vertex] = new_color
+            return offspring
 
 
         # starting value for number of colors is the max_degree + 1
         k = graph.maximum_degree + 1
-        lowest_found = None
+        lowest_found = float("inf")
         total += 1
+        optimal_solution = None
         while True:
+            # the optimal solution has been found
             if k <= graph.chromatic_number - 1:
                 print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
                                     graph.number_of_vertices, graph.number_of_edges)
                 scores[0] += 1
+                # TODO take a screenshot of a graph that it did not manage to color
+                if draw_colored_graph:
+                    graph.draw(optimal_solution)
                 break
 
             ga_instance = pygad.GA(num_generations=1000,
@@ -124,8 +163,8 @@ if __name__ == "__main__":
                                 # mutation_by_replacement=True,
                                 # save_best_solutions=True,
                                 crossover_type="single_point",
-                                mutation_type=mutation_func,
-                                parent_selection_type="sss",
+                                mutation_type=mutation_func_targeted_change_on_bad_vertices,
+                                parent_selection_type="rank",
                                 keep_elitism=1,
                                 stop_criteria=f"reach_0")
             ga_instance.run()
@@ -143,7 +182,22 @@ if __name__ == "__main__":
                 else:
                     scores[4] += 1
                 break
+            if k == graph.chromatic_number:
+                optimal_solution = solution
             lowest_found = k
             k -= 1
 
     print_total_score(scores, total)
+
+
+
+if __name__ == "__main__":
+    random.seed(time.time())
+
+    if len(sys.argv) == 2:
+        input_file = sys.argv[1]
+    else:
+        input_file = INPUT_FILE
+
+    draw_colored_graph = False
+    genetic_search(input_file, draw_colored_graph)

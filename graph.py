@@ -1,3 +1,8 @@
+import networkx as nx
+import matplotlib.pyplot as plt
+
+possible_colors = ["red", "green", "blue", "yellow", "orange", "purple", "pink", "brown", "gold", "aqua", "violet"]
+
 class Graph:
 
     def __init__(self, adjacency_list, chromatic_number, maximum_degree, number_of_edges, number_of_vertices):
@@ -18,3 +23,16 @@ class Graph:
 
     def __repr__(self):
         return f"<{str(self.adjacency_list)}, chr_num={self.chromatic_number}, max_deg={self.maximum_degree}>"
+    
+
+    def draw(self, solution):
+        if self.chromatic_number > len(possible_colors):
+            return
+        network = nx.Graph()
+        network.add_nodes_from([i for i in range(len(self.adjacency_list))])
+        for vertice, adjacent_vertices in self.adjacency_list.items():
+            for adjacent_vertice in adjacent_vertices:
+                network.add_edge(vertice, adjacent_vertice)
+        color_list = [possible_colors[i] for i in solution]
+        nx.draw(network, node_color=color_list, with_labels=True)
+        plt.show()        
