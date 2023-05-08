@@ -4,14 +4,14 @@ import random
 import time
 import sys
 
-INPUT_FILE = "/home/filip/Work/FER/6_semestar/zavrsni_rad/sources/graphs/test_file.txt"
+INPUT_FILE = "./sources/graphs/single_graph.txt"
 
 
 def print_graph_score(chromatic_number, k_found, starting_number, num_vertices, num_edges):
     print("--------------------------------------------------")
     print(f"Real chromatic number: {chromatic_number}")
     print(f"Found chromatic number: {k_found}")
-    print(f"Started from: {starting_number}")
+    print(f"Number of colors started from: {starting_number}")
     print(f"Number of vertices: {num_vertices}")
     print(f"Number of edges: {num_edges}")
 
@@ -139,7 +139,7 @@ def genetic_search(input_file, draw_colored_graph):
         k = graph.maximum_degree + 1
         lowest_found = float("inf")
         total += 1
-        optimal_solution = None
+        previous_solution = None
         while True:
             # the optimal solution has been found
             if k <= graph.chromatic_number - 1:
@@ -148,7 +148,7 @@ def genetic_search(input_file, draw_colored_graph):
                 scores[0] += 1
                 # TODO take a screenshot of a graph that it did not manage to color
                 if draw_colored_graph:
-                    graph.draw(optimal_solution)
+                    graph.draw(previous_solution)
                 break
 
             ga_instance = pygad.GA(num_generations=1000,
@@ -163,7 +163,7 @@ def genetic_search(input_file, draw_colored_graph):
                                 # mutation_by_replacement=True,
                                 # save_best_solutions=True,
                                 crossover_type="single_point",
-                                mutation_type=mutation_func_targeted_change_on_bad_vertices,
+                                mutation_type=mutation_func,
                                 parent_selection_type="rank",
                                 keep_elitism=1,
                                 stop_criteria=f"reach_0")
@@ -181,9 +181,13 @@ def genetic_search(input_file, draw_colored_graph):
                     scores[3] += 1
                 else:
                     scores[4] += 1
+                if draw_colored_graph:
+                    if previous_solution is not None:
+                        graph.draw(previous_solution)
+                    else:
+                        graph.draw(solution)
                 break
-            if k == graph.chromatic_number:
-                optimal_solution = solution
+            previous_solution = solution
             lowest_found = k
             k -= 1
 
@@ -196,8 +200,13 @@ if __name__ == "__main__":
 
     if len(sys.argv) == 2:
         input_file = sys.argv[1]
+        draw_colored_graph = False
+    elif len(sys.argv) == 3:
+        input_file = sys.argv[1]
+        draw_colored_graph = (sys.argv[2].lower() == "true" or sys.argv[2].lower() == "t")
     else:
-        input_file = INPUT_FILE
-
-    draw_colored_graph = False
+        print("[USAGE] python3 main.py <input_file> [<draw_solution>]")
+        print("                        <input_file> - path to the file containing graphs. Must not be empty.")
+        print("                        <draw_solution> - set to \"true\" or \"t\" if you wish the solution to be drawn. Optional.")
+        exit(1)
     genetic_search(input_file, draw_colored_graph)

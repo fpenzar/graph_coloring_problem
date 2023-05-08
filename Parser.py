@@ -56,10 +56,15 @@ class Parser:
                 if key == "Number of Vertices":
                     number_of_vertices = int(values)
                     continue
+            self.graphs.append(Graph(adjacency_list, 
+                                    chromatic_number, 
+                                    max_degree,
+                                    number_of_edges,
+                                    number_of_vertices))
     
 
     def next_graph(self) -> Graph:
-        if self.i == len(self.graphs) - 1:
+        if self.i == len(self.graphs):
             return None
         else:
             self.i += 1

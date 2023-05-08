@@ -29,10 +29,10 @@ class Graph:
         if self.chromatic_number > len(possible_colors):
             return
         network = nx.Graph()
-        network.add_nodes_from([i for i in range(len(self.adjacency_list))])
+        network.add_nodes_from([i + 1 for i in range(len(self.adjacency_list))])
         for vertice, adjacent_vertices in self.adjacency_list.items():
             for adjacent_vertice in adjacent_vertices:
-                network.add_edge(vertice, adjacent_vertice)
-        color_list = [possible_colors[i] for i in solution]
+                network.add_edge(vertice + 1, adjacent_vertice + 1)
+        color_list = [possible_colors[i - 1] for i in solution]
         nx.draw(network, node_color=color_list, with_labels=True)
         plt.show()        
