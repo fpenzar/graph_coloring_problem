@@ -31,6 +31,5 @@ The goals of this project are to:
 * programmatically realize a program system for solving the graph coloring problem with an
 evolutionary algorithm with a simple user interface using freely available program libraries
 * test the performance of the evolutionary algorithm on several graph coloring problems
-* experimentally determine the set of parameters of the genetic algorithm that randomly
-selects genetic operators
+* experimentally determine the set of parameters of the genetic algorithm for best results
 * attach the original program texts and cite the literature used with the paper
