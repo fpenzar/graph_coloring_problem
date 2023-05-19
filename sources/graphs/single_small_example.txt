@@ -1,77 +1,246 @@
-1: 8 9 23 24
-2: 7 10 21 22
-3: 5 14 15 19 24
-4: 6 10 13 16 26
-5: 3 9 18 20 25
-6: 4 12 17 19 20
-7: 2 11 12 13 26
-8: 1 11 15 22 25
-9: 1 5 10 17 26
-10: 2 4 9 14 25
-11: 7 8 16 19 20 21
-12: 6 7 15 16 18 24
-13: 4 7 15 17 18 24
-14: 3 10 17 18 20 26
-15: 3 8 12 13 21 23
-16: 4 11 12 17 22 23
-17: 6 9 13 14 16 25
-18: 5 12 13 14 19 21
-19: 3 6 11 18 22 23
-20: 5 6 11 14 22 23
-21: 2 11 15 18 24 26
-22: 2 8 16 19 20 26
-23: 1 15 16 19 20 25
-24: 1 3 12 13 21 25
-25: 5 8 10 17 23 24 26
-26: 4 7 9 14 21 22 25
-
-Chromatic Number: 4
-Maximum Degree: 7
-umber of Edges: 73
-Number of Vertices: 26
+1: 2 3 4
+2: 1 199 200
+3: 1 196 198
+4: 1 195 197
+5: 6 7 22
+6: 5 19 34
+7: 5 18 33
+8: 9 10 158
+9: 8 11 68
+10: 8 12 67
+11: 9 20 43
+12: 10 21 44
+13: 14 15 127
+14: 13 16 96
+15: 13 17 95
+16: 14 18 69
+17: 15 19 70
+18: 7 16 46
+19: 6 17 45
+20: 11 24 32
+21: 12 23 31
+22: 5 23 24
+23: 21 22 26
+24: 20 22 25
+25: 24 29 30
+26: 23 27 28
+27: 26 40 48
+28: 26 39 47
+29: 25 42 50
+30: 25 41 49
+31: 21 35 36
+32: 20 37 38
+33: 7 40 42
+34: 6 39 41
+35: 31 64 72
+36: 31 63 71
+37: 32 66 74
+38: 32 65 73
+39: 28 34 64
+40: 27 33 63
+41: 30 34 66
+42: 29 33 65
+43: 11 61 62
+44: 12 59 60
+45: 19 56 58
+46: 18 55 57
+47: 28 52 56
+48: 27 51 55
+49: 30 54 58
+50: 29 53 57
+51: 48 84 98
+52: 47 83 97
+53: 50 86 100
+54: 49 85 99
+55: 46 48 88
+56: 45 47 87
+57: 46 50 90
+58: 45 49 89
+59: 44 92 102
+60: 44 91 101
+61: 43 94 104
+62: 43 93 103
+63: 36 40 92
+64: 35 39 91
+65: 38 42 94
+66: 37 41 93
+67: 10 81 82
+68: 9 79 80
+69: 16 84 86
+70: 17 83 85
+71: 36 76 88
+72: 35 75 87
+73: 38 78 90
+74: 37 77 89
+75: 72 120 129
+76: 71 119 128
+77: 74 122 131
+78: 73 121 130
+79: 68 126 133
+80: 68 125 132
+81: 67 124 135
+82: 67 123 134
+83: 52 70 120
+84: 51 69 119
+85: 54 70 122
+86: 53 69 121
+87: 56 72 116
+88: 55 71 115
+89: 58 74 118
+90: 57 73 117
+91: 60 64 124
+92: 59 63 123
+93: 62 66 126
+94: 61 65 125
+95: 15 112 114
+96: 14 111 113
+97: 52 109 112
+98: 51 109 111
+99: 54 110 114
+100: 53 110 113
+101: 60 106 116
+102: 59 105 115
+103: 62 108 118
+104: 61 107 117
+105: 102 155 160
+106: 101 154 159
+107: 104 157 162
+108: 103 156 161
+109: 97 98 151
+110: 99 100 150
+111: 96 98 147
+112: 95 97 146
+113: 96 100 149
+114: 95 99 148
+115: 88 102 143
+116: 87 101 142
+117: 90 104 145
+118: 89 103 144
+119: 76 84 155
+120: 75 83 154
+121: 78 86 157
+122: 77 85 156
+123: 82 92 153
+124: 81 91 152
+125: 80 94 153
+126: 79 93 152
+127: 13 150 151
+128: 76 141 147
+129: 75 141 146
+130: 78 140 149
+131: 77 140 148
+132: 80 137 145
+133: 79 136 144
+134: 82 139 143
+135: 81 138 142
+136: 133 176 182
+137: 132 175 181
+138: 135 178 180
+139: 134 177 179
+140: 130 131 174
+141: 128 129 173
+142: 116 135 172
+143: 115 134 171
+144: 118 133 172
+145: 117 132 171
+146: 112 129 168
+147: 111 128 167
+148: 114 131 170
+149: 113 130 169
+150: 110 127 174
+151: 109 127 173
+152: 124 126 166
+153: 123 125 165
+154: 106 120 178
+155: 105 119 177
+156: 108 122 176
+157: 107 121 175
+158: 8 165 166
+159: 106 163 168
+160: 105 163 167
+161: 108 164 170
+162: 107 164 169
+163: 159 160 194
+164: 161 162 193
+165: 153 158 192
+166: 152 158 191
+167: 147 160 186
+168: 146 159 185
+169: 149 162 188
+170: 148 161 187
+171: 143 145 192
+172: 142 144 191
+173: 141 151 194
+174: 140 150 193
+175: 137 157 190
+176: 136 156 189
+177: 139 155 190
+178: 138 154 189
+179: 139 184 186
+180: 138 184 185
+181: 137 183 188
+182: 136 183 187
+183: 181 182 200
+184: 179 180 199
+185: 168 180 198
+186: 167 179 197
+187: 170 182 198
+188: 169 181 197
+189: 176 178 196
+190: 175 177 195
+191: 166 172 196
+192: 165 171 195
+193: 164 174 200
+194: 163 173 199
+195: 4 190 192
+196: 3 189 191
+197: 4 186 188
+198: 3 185 187
+199: 2 184 194
+200: 2 183 193
 
 Acyclic: No
-Algebraic Connectivity: 2.512
-Average Degree: 5.615
-Bipartite: No
-Chromatic Index: 7
-Chromatic Number: 4
-Circumference: 26
+Algebraic Connectivity: 0.173
+Average Degree: 3
+Bipartite: Yes
+Chromatic Index: Computation time out
+Chromatic Number: 2
+Circumference: Computation time out
 Claw-Free: No
 Clique Number: 2
 Connected: Yes
-Density: 0.225
-Diameter: 3
-Domination Number: 5
-Edge Connectivity: 4
+Density: 0.015
+Diameter: 12
+Domination Number: Computation time out
+Edge Connectivity: Computation time out
 Eulerian: No
 Genus: Computation time out
-Girth: 4
-Group Size: 1
-Hamiltonian: Yes
-Hypohamiltonian: No
-Hypotraceable: No
-Independence Number: 7
-Index: 5.72
-Laplacian Largest Eigenvalue: 10.154
-Longest Induced Cycle: 10
-Longest Induced Path: 12
-Matching Number: 13
-Maximum Degree: 7
-Minimum Degree: 4
+Girth: 8
+Group Size: 800
+Hamiltonian: Computation time out
+Hypohamiltonian: Computation time out
+Hypotraceable: Computation time out
+Independence Number: 100
+Index: 3
+Laplacian Largest Eigenvalue: 6
+Longest Induced Cycle: Computation time out
+Longest Induced Path: Computation time out
+Matching Number: 100
+Maximum Degree: 3
+Minimum Degree: 3
 Number of Components: 1
-Number of Edges: 73
+Number of Edges: 300
 Number of Spanning Trees: 2147483647
 Number of Triangles: 0
-Number of Vertex Orbits: 26
-Number of Vertices: 26
-Number of Zero Eigenvalues: 0
+Number of Vertex Orbits: 1
+Number of Vertices: 200
+Number of Zero Eigenvalues: 16
 Planar: No
-Radius: 2
-Regular: No
-Second Largest Eigenvalue: 2.807
-Smallest Eigenvalue: -3.913
-Traceable: Yes
-Treewidth: 10
-Vertex Connectivity: 4
-Vertex Cover Number: 19
+Radius: 12
+Regular: Yes
+Second Largest Eigenvalue: 2.827
+Smallest Eigenvalue: -3
+Traceable: Computation time out
+Treewidth: Computation time out
+Vertex Connectivity: 3
+Vertex Cover Number: 100

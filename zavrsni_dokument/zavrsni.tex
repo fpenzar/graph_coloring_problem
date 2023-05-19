@@ -28,12 +28,14 @@ Postoji mnogo NP-teških problema pretraživanja u kojima rješenje nije moguće
 
 Jedan NP-težak problem je određivanje kromatskog broja grafa, a jedna heuristička skupina algoritama su evolucijski algoritmi. Ovaj rad pobliže opisuje način rada evolucijskih algoritama, njihov podskup genetskih algoritama, problem bojanja grafa, te primjenu i analizu evolucijskih algoritama pri određivanju kromatskog broja grafa.
 
-U drugom poglavlju daje se kratko objašnjenje i uvod u problem određivanja kromatskog broja grafa. Zatim se u sljedećem poglavlju objašnjava princip rada evolucijskih algoritama te se detaljnije obrađuju genetski algoritmi, njihov način rada te različite varijacije parametara i funkcija koje utječu na kvalitetu dobivenog rješenja. U četvrtom poglavlju dan je kratak pregled korištenih biblioteka i podataka.
+U drugom poglavlju daje se kratko objašnjenje i uvod u problem određivanja kromatskog broja grafa. U poglavlju se daje i pregled iscrpnih algoritama traženja kromatskog broja. Zatim se u sljedećem poglavlju objašnjava princip rada evolucijskih algoritama te se detaljnije obrađuju genetski algoritmi, njihov način rada te različite varijacije parametara i funkcija koje utječu na kvalitetu dobivenog rješenja. U četvrtom poglavlju dan je kratak pregled korištenih biblioteka i podataka. 
+
+Peto poglavlje opisuje način implementacije praktičnog dijela rada, korištene parametre i razloge njihovog odabira. U šestom se poglavlju iznose i uspoređuju rezultati testiranja različitih varijacija algoritama. Sedmo poglavlje objašnjava dobivene podatke i daje zaključak.
 
 \chapter{Kromatski broj grafa}
-\section{Uvod}
 Kromatski broj grafa, $\chi(G)$, predstavlja minimalan broj boja s kojima se mogu obojati vrhovi grafa, tako da niti jedna dva susjedna vrha (vrhovi spojeni bridom) nisu obojana istom bojom. 
 
+\section{Motivacija}
 Kromatski broj koristi se u rješavanju mnogih problema; problema raspoređivanja, dodjele registara u procesoru, rješavanja Sudoku, dodjele radio frekvencije, sparivanje uzoraka, sinkronizacije paralelnih procesa itd. 
 
 \begin{figure}[htb]
@@ -134,6 +136,7 @@ Kod problema bojanja grafa, genom je vektor od $n$ elemenata gdje je $n$ broj vr
 \end{figure}
 
 \subsection{Funkcija cijene}
+\label{sec:funkcija cijene}
 Određivanje koliko je koja jedinka dobra određuje se pomoću funkcije cijene. Ona mjeri koliko je trenutno rješenje udaljeno od ciljnog. Što je cijena jedinke manja, to je rješenje bolje. Kada cijene neke jedinke dosegne 0, pronađeno je ispravno rješenje.
 
 Suprotno funkciji cijene je funkcija dobrote, prema kojoj bolje jedinke imaju veću vrijednost.
@@ -151,12 +154,16 @@ U primjeru bojanja grafova, ciljno rješenje ne smije imati niti jedna dva susje
 Roditelji se iz populacije biraju na temelju njihove izračunate cijene. Jedinke s manjom cijenom imaju prednost pri reproduciranju nad jedinkama s većom cijenom. Postoji mnogo različitih načina odabira roditelja u sklopu genetskih algoritama, no ovaj projekt se zadržao na sljedeća tri:
 \begin{itemize}
     \item Slučajna selekcija
+    \item Selekcija stabilnog stanja
     \item Roullete wheel
     \item Rang selekcija
 \end{itemize}
 
 \subsubsection{Slučajna selekcija}
 Kao naivnu metodu selekcije roditelja koristi se Slučajna selekcija. Iz populacije se slučajnim odabirom izabiru dvije jedinke kao roditelji novoj jedinci. Ova metoda je manje uspješna od ostalih metoda selekcije i zato nije pretjerano korištena. Razlog manjoj uspješnosti je što cijena izračunata za pojedine jedinke nimalo ne utječe na izbor jedinke kao roditelja. Bolje jedinke nemaju nikakvu prednost kod reprodukcije što znači da rješenja sporije konvergiraju, ili uopće ne konvergiraju k optimumu.
+
+\subsubsection{Selekcija stabilnog stanja}
+Kod selekcije stabilnog stanja (\textit{eng. Steady State Selection}), među populacijom se biraju dvije jedinke s najboljom dobrotom. Iz njih se stvaraju dvije nove jedinke, njihova djeca i na njima se provodi mutacija. Zatim se izračunava dobrota djece i djeca se dodaju populaciji. Iz populacije se tada izbacuju dvije jednike s najmanjom dobrotom. Ovakav prisput odabira roditelja i njihove djece proizvodi svega dvije nove jedinke po generaciji, ali su one uvijek potomci dvoje roditelja s najboljom dobrotom.  
 
 \subsubsection{Roullete wheel}
 Nakon što su izračunate cijene za sve jedinke u generaciji, svakoj se pridjeljuje udio na \textit{roullete wheel-u}. Udio je proporcionalan cijenama jedinki; one s nižom cijenom (većom dobrotom) će imati veći udio na \textit{roullete wheel-u}. Time se osigurava da bolje jedinke imaju veću vjerojatnost da budu odabrane kao roditelji sljedećoj generaciji. Rješenje se tako brže približava optimumu jer će djeca naslijediti gene od uspješnijih roditelja. 
@@ -183,7 +190,7 @@ Rang selekcija po principu je slična \textit{roullete wheel-u}, ali se umjesto 
 Na taj način svaki rang uvijek ima jednaku vjerojatnost biti izabran. Bolje jedinke imaju veću vjerojatnost biti izabrane kao roditelji sljedećoj generaciji, a ne može se dogoditi da neke jedinke koje vode do lokalnog optimuma imaju preveliku prednost nad ostalim jedinkama te da zbog toga algoritam ne konvergira u globalno rješenje.
 
 \subsection{Križanje}
-Križanje je postupak kojim se iz izabranih genoma roditelja dobiva genom potomka. Potomak se sastoji od pomješanog genoma svojih roditelja. Križanje se izvodi tako da se na slučajnom mjestu prerežu genomi oba roditelja u točki prijeloma, zamijene se prvi dijelovi genoma i dobiju se dvije nove jedinke; prva jedinka s prvim dijelom genoma od prvog roditelja i drugim dijelom genoma od drugog roditelja, i druga jedinka s prvim dijelom genoma od drugog roditelja i drugim dijelom genoma od prvog roditelja.
+Križanje je postupak kojim se iz izabranih genoma roditelja dobiva genom potomka. Potomak se sastoji od pomješanog genoma svojih roditelja. Križanje se izvodi tako da se na slučajnom mjestu prerežu genomi oba roditelja u točki prijeloma, zamijene se prvi dijelovi genoma i dobiju se dvije nove jedinke; prva jedinka s prvim dijelom genoma od prvog roditelja i drugim dijelom genoma od drugog roditelja, i druga jedinka s prvim dijelom genoma od drugog roditelja i drugim dijelom genoma od prvog roditelja. Osim križanja sa samo jednom točkom prijeloma, postoji i križanje s više točaka prijeloma. 
 
 Postupak križanja vizualno je prikazan na slikama \ref{fig:kromosomi roditelja}, \ref{fig:krizanje}, \ref{fig:kromosomi djece}.
 
@@ -242,7 +249,6 @@ Nakon slučajnog izbora početne populacije, nad svakom jedinkom izračunava se 
 \end{figure}
 
 \chapter{Korištene biblioteke i podaci}
-Projekt je pisan u programskom jeziku Python koristeći slobodno dostupne biblioteke.
 
 \section{PyGAD}
 PyGAD je biblioteka otvorenog koda za programski jezik Python pomoću koje se vrlo jednostavno mogu izgraditi modeli genetskih algoritama. Biblioteka dolazi s mnoštvom ugrađenih metoda, specifičnima za genetske algoritme. PyGAD je vrlo fleksibilan i dozvoljava definiranje vlastitih funckija izračuna dobrote, izbora roditelja, križanja i mutacije.
@@ -265,6 +271,7 @@ Instalacija biblioteke vrši se preko PIP-a sljedećom naredbom:
 \end{lstlisting}
 
 \section{House of Graphs}
+\label{sec:house of graphs}
 House of Graphs je Web-stranica koja sadržava bazu grafova s karakteristikama koja dozvoljava njihovo besplatno preuzimanje. House of Graphs razvijen je u suradnji sveučilišta Ghent i sveučilišta KU Leuven.
 
 U sklopu projekta preuzeti su grafovi s brojem vrhova između 1 i 250. Za svaki od grafova definirana je matrica susjedstva kao i kromatski broj grafa. Na taj se način rješenje dobiveno genetskim algoritmom može usporediti sa stvarnom vrijednošću kromatskog broja grafa. Za neke od kompleksnijh grafova nije izračunat kromatski broj (\textit{Chromatic number: Computation timeout}) te su takvi grafovi preskočeni kod izračuna točnosti rada genetskog algoritma.
@@ -289,11 +296,219 @@ Definicija grafa preuzetog s House of Graphs Web-stranice s 26 vrhova dana je sl
 
 
 \chapter{Praktični dio}
+Projekt je pisan u programskom jeziku Python. Python je izabran zbog jednostavnosti korištenja i dobre potpore rješavanju problema u obliku slobodno dostupnih biblioteka.
+
+\section{Određivanje dobrote jedinki}
+Funkcija cijene korištena u sklopu projekta opisana je u potpoglavlju \ref{sec:funkcija cijene}. Funkcija je prilagođena kako bi bila kompatibilna s PyGAD bibliotekom koja zahtjeva korištenje funkcije dobrote. Kod određivanja ispravnog bojanja grafa prirodno je koristiti funkciju cijene, kao mjeru broja vrhova obojanih krivom bojom. Ispravno bojanje grafa određeno je maksimumom funkcije dobrote koji je nula (niti jedan vrh nije obojan istom bojom kao i njegov susjed), a za svaki krivo obojani vrh dobrota pada za jedan. Lošije jedinke tako imaju manju dobrotu.
+
+\section{Određivanje roditelja}
+Roditelji su određivani na dva načina; slučajnim odabirom i rang selekcijom. Slučajan odabir izabran je kako bi se pokazali nedostatci te metode, ali i dao uvid u rad ostatka algoritma i odabira ostalih parametara. Rang selekcija korištena je kako bi se postigli optimalni rezultati i rješio problem bojanja na što bolji način.
+
+\section{Križanje}
+Za metodu križanja je korišteno križanje s jednom točkom prijeloma.
+
+\section{Mutacije}
+Najbitniju ulogu u samom algoritmu imale su mutacije. Na početku su se koristile slučajne mutacije s vjerojatnošću mutiranja na svakom genu od 20\%. Ovaj relativno visok postotak uzet je kako bi se populacija brže širila po prostoru pretraživanja te ne bi zapela u lokalnim optimumima. Problem je što geni unutar svake jedinke nisu nezavisni, pa se na slijepo pogađanje nisu dobili zadovoljavajući rezultati. Iz tog razloga isprobane su i neke kompleksnije funkcije mutacije. 
+
+\subsection{Slučajna mutacija na krivim vrhovima}
+\label{sec: slucajna mutacija na krivim vrhovima}
+Prvi pristup mutaciji slučajno je mijenjao vrijednosti samo onih gena koji su obojani istom bojom kao i njihovi susjedi. Na ovaj način su vrhovi koji su bili dobro obojani ostali netaknuti. Rješenje na ovaj način konvergira prema pravom jer se jednom pronađena dobra bojanja ne mijenjaju. Slučajna mutacija na krivim vrhovima ne uzima u obzir njihove susjede kod odabira nove boje. Zbog toga se prostor pretraživanja pretražuje na relativno širokom području. Implementacija je dana u Pythonu slikom \ref{fig:slucajna mutacija na krivim vrhovima}.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=14cm]{images/slucajna_mutacija_na_krivim_vrhovima.png}
+\caption{Slučajna mutacija na krivim vrhovima}
+\label{fig:slucajna mutacija na krivim vrhovima}
+\end{figure}
+
+\subsection{Ciljana mutacija na krivim vrhovima}
+\label{sec: ciljana mutacija na krivim vrhovima}
+U ovoj metodi, slično kao i u potpoglavlju \ref{sec: slucajna mutacija na krivim vrhovima}, mutacija se odvija samo na vrhovima koji su obojani isto kao i neki od njihovih susjeda. Mutacija na takvim vrhovima nije slučajna, već se gledaju susjedi takvog vrha i za njegovo ponovno bojanje bira se boja kojom njegovi susjedi nisu obojani. Ukoliko takva boja ne postoji, slučajnim odabirom izabire se neka od boja iz skupa svih boja. Ovakva implementacija osigurava da dobro obojani vrhovi ostanu netaknuti, a oni krivo obojani ciljano promijene svoju boju ne narušavajući ispravna bojanja ostalih vrhova ukoliko to mogu. Implementacija je dana u Pythonu slikom \ref{fig:ciljana mutacija na krivim vrhovima}.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=14cm]{images/ciljana_mutacija_na_krivim_vrhovima.png}
+\caption{Ciljana mutacija na krivim vrhovima}
+\label{fig:ciljana mutacija na krivim vrhovima}
+\end{figure}
+
+\subsection{Kombinacija slučajne i ciljane mutacije na krivim vrhovima}
+\label{sec: kombinacija slucajne i ciljane mutacije na krivim vrhovima}
+Ovisno o dobroti najbolje jedinke iz prethodne populacije, ovaj algoritam bira jednu od mutacija iz potpoglavlja \ref{sec: slucajna mutacija na krivim vrhovima} i potpoglavlja \ref{sec: ciljana mutacija na krivim vrhovima}. Ukoliko je dobrota najbolje jedinke blizu optimalne, nula, tada se koristi \textit{Slučajna mutacija na krivim vrhovima} jer se želi izbjeći zaustavljanje u lokalnom minimumu. Kada je dobrota najbolje jedinke daleko od optimalne, koristi se \textit{Ciljana mutacija na krivim vrhovima} jer se želi usmjerenije pretražiti prostor i na taj način stići do minimuma. Implementacija je dana u Pythonu slikom \ref{fig:kombinacija slucajen i ciljane mutacije}.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=14cm]{images/kombinacija_slucajne_i_ciljane_mutacije.png}
+\caption{Kombinacija slučajne i ciljane mutacije na krivim vrhovima}
+\label{fig:kombinacija slucajen i ciljane mutacije}
+\end{figure}
+
+\section{Ostali parametri}
+Ostali korišteni parametri dani su tablicom \ref{tbl:ostali parametri genetrskog algoritma}.
+
+\begin{table}[htb]
+\caption{Ostali parametri genetskog algoritma}
+\label{tbl:ostali parametri genetrskog algoritma}
+\centering
+\begin{tabular}{llr} \hline
+Parametar & Vrijednost\\ \hline
+broj generacija & 1000 \\
+jedinke po generaciji & 50 \\
+elitizam & istina \\
+broj gena & $n$ \\ \hline
+\end{tabular}
+\end{table}
+
+Broj generacija i broj jedinki po generaciji odabrani su kao kompromis između vremena izvođenja algoritma i uspješnosti algoritma. Broj gena odgovara broju vrhova, $n$, jer se svaki vrh kodira svojim genom. 
+
+Elitizam je strategija evolucijskih algoritama kojom se najbolje jedinke, u kontekstu ovog projekta jedna, automatski prenose u sljedeću generaciju. Na taj način se čuvaju uspješne jedinke, imaju više potomaka i algoritam brže konvergira optimalnom rješenju. 
+
+\section{Postupak određivanja kromatskog broja}
+Nakon parsiranja grafova preuzetih s House of Graphs (potpoglavlje \ref{sec:house of graphs}), za svaki od grafova određuje se kromatski broj. Početna vrijednost $k$ je postavljena na $\Delta + 1$. Ako se genetskim algoritmom pronašlo ispravno bojanje sa zadanim $k$ (dobrota neke jedinke je jednaka nuli), $k$ se smanjuje za 1, a najbolja jedinka se pohranjuje. Algoritam prekida s radom u dva slučaja; ukoliko je pronašao ispravno bojanje s $k=\chi(G)$ (točan kromatski broj je zadan zajedno s definicijom grafa) ili algoritam nije pronašao ispravno bojanje za trenutni $k$. U potonjem slučaju algoritam vraća $k+1$ kao zadnji ispravan broj boja. Implementacija je dana u Pythonu slikom \ref{fig:odredivanje kromatskog broja genetskim algoritmom}.
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=14cm]{images/genetski_algoritam_i_odredivanje_broja.png}
+\caption{Određivanje kromatskog broja genetskim algoritmom}
+\label{fig:odredivanje kromatskog broja genetskim algoritmom}
+\end{figure}
+
+\section{Vizualizacija rezultata}
+Podaci o uspješnom pronalasku kromatskog broja se pohranjuju, tako da je na kraju izvođenja programa moguće odrediti postotak uspješnih pronalazaka kromatkog broja. Uz to, program je u mogućnosti vizualizirati dobivene rezultate crtanjem obojenog grafa.
+
+
+\begin{figure}[htb]
+\centering
+\includegraphics[width=15cm]{images/200_vrhova_bipartitan_graf.png}
+\caption{Bojanje bipartitnog grafa s 200 vrhova}
+\label{fig:bojanje grafa s 200 vrhova}
+\end{figure}
 
 \chapter{Rezultati praktičnog dijela}
+Testirane su različite kombinacije parametara i funkcija s ciljem pronalaska optimalnih parametara. Testiranje se provodilo na dva skupa podataka; 200 grafova s rasponom broja vrhova od 1 do 250, te 1226 grafova s rasponom broja vrhova od 200 do 249.
+
+Kao mjera uspješnosti, korištena je \textit{točnost}, omjer broja točno određenih kromatskih brojeva i ukupnog broja grafova za koje se određivao kromatski broj.
+
+\subsubsection{Funkcije mutacije}
+Korištene su funkcije mutacije opisane u potpoglavljima \ref{sec: slucajna mutacija na krivim vrhovima} (slučajna mutacija na krivim vrhovima), \ref{sec: ciljana mutacija na krivim vrhovima} (ciljana mutacija na krivim vrhovima), \ref{sec: kombinacija slucajne i ciljane mutacije na krivim vrhovima} (kombinacija slučajne i ciljane mutacije na krivim vrhovima) i slučajna funkcija mutacije. 
+
+\subsubsection{Odabir roditelja}
+Korištene metode odabira roditelja su rang selekcija, slučajan odabir i selekcija stabilnog stanja.
+
+\subsubsection{Ostali parametri}
+Ostali parametri držani su konstantnima tokom testiranja.
+
+\section{Manji skup podataka}
+Na manjem skupu podataka od 200 grafova željelo se ustanoviti koliko su algoritmi dobri u pronalaženju rješenja na grafovima s većim rasponom broja vrhova. Pretpostavka je bila da će sve varijacije algoritma biti relativno dobre kod pronalaženja kromatskog broja za jednostavne grafove (mali broj vrhova i bridova), ali da će algoritmi koji koriste slučajan odabir biti lošiji.
+
+\subsubsection{Selekcija stabilnog stanja}
+U nastavku su prikazani rezultati algoritama koji koriste selekciju stabilnog stanja za odabir roditelja, ali koriste različite funkcije mutacije.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/chart_sss_test_file.png}
+\caption{Grafikon točnosti algoritama selekcije stabilnog stanja}
+\label{fig:grafikon tocnosti algoritama selekcije stabilnog stanja}
+\end{figure}
+
+Iz grafikona sa slike \ref{fig:grafikon tocnosti algoritama selekcije stabilnog stanja} vidimo da je točnost daleko najlošija kod algoritma sa slučajnom mutacijom. Ostale tri varijacije se čine podjednako uspješne, s točnosti od oko 95\%. Slučajna mutacija na krivim vrhovima ima malo nižu točnost od preostala dva algoritma mutacije.
+
+\newpage
+\subsubsection{Rang selekcija}
+U nastavku su prikazani rezultati algoritama koji koriste rang selekciju za odabir roditelja, ali koriste različite funkcije mutacije.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/chart_rank_test_file.png}
+\caption{Grafikon točnosti algoritama rang selekcije}
+\label{fig:grafikon tocnosti algoritama rank selekcije}
+\end{figure}
+
+Kao i kod selekcije stabilnog stanja, iz  grafikona sa slike \ref{fig:grafikon tocnosti algoritama rank selekcije} vidimo da je slučajna mutacija postigla najlošije rezultate. Ostale tri varijacije su podjednako uspješne, s točnosti od preko 95\%. Uspoređujući rang selekciju i selekciju stabilnog tipa, vidimo da je rang selekcija ostvarila bolje rezultate u svakoj od varijacija algoritma.
+
+\newpage
+\subsubsection{Slučajna selekcija}
+U nastavku su prikazani rezultati algoritama koji koriste slučajnu selekciju za odabir roditelja, ali koriste različite funkcije mutacije.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/chart_random_selection_results.png}
+\caption{Grafikon točnosti algoritama slučajne selekcije}
+\label{fig:grafikon tocnosti algoritama slucajne selekcije}
+\end{figure}
+
+Iz grafikona sa slike \ref{fig:grafikon tocnosti algoritama slucajne selekcije} uočavamo da je točnost manja za sve varijacije mutacija u odnosu na rang selekciju i selekciju stabilnog stanja. Slučajna mutacija i dalje ima najlošiju točnost od samo 20\%.
+
+\newpage
+\subsection{Usporedba rezultata}
+U nastavku su prikazani najviše postignute točnosti grupirane po strategijama odabira roditelja.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/chart_best_scores.png}
+\caption{Grafikon točnosti najboljih varijacija algoritama}
+\label{fig:grafikon tocnosti najboljih varijacija algoritama}
+\end{figure}
+
+Iz grafikona sa slike \ref{fig:grafikon tocnosti najboljih varijacija algoritama} vidimo da je rang selekcija postigla najbolju točnost, dok je slučajna selekcija najmanje uspješna. Razlika postignute točnosti između te dvije strategije odabira roditelja je čak 10\%. Selekcija stabilnog tipa je vrlo blizu rang selekciji s 95\%-tnom točnošću. 
+
+\newpage
+\section{Veći skup podataka}
+Na skupu podataka od 1226 grafova s brojem vrhova između 200 i 249 testirane su samo varijacije algoritama koje su ostvarile najbolje rezultate na skupu od 200 podataka.
+
+\subsubsection{Selekcija stabilnog stanja s kombiniranom funkcijom mutacije}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/custom_mutacija_200_249.png}
+\caption{Selekcija stabilnog stanja s kombiniranom funkcijom mutacije}
+\label{fig:sss kombinirana rezultati}
+\end{figure}
+
+Iz rezultata sa slike \ref{fig:sss kombinirana rezultati} vidimo da je algoritam postigao točnost od 90\%. U samo jednom slučaju je pogriješio za 4 ili više, a u preostalim slučajevima je pogriješio za samo jednu boju više.
+
+\subsubsection{Rang selekcija s kombiniranom funkcijom mutacije}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/mutation_func_rank_selection_200_249.png}
+\caption{Rang selekcija s kombiniranom funkcijom mutacije}
+\label{fig:rank selekcija kombinirana rezultati}
+\end{figure}
+
+Iz rezultata sa slike \ref{fig:rank selekcija kombinirana rezultati} vidimo da je algoritam postigao točnost od skoro 91\%. U samo jednom slučaju je pogriješio za 3, a u preostalim je slučajevima pogriješio samo za jednu boju više.
+
+\newpage
+\subsubsection{Rang selekcija s ciljanom mutacijom krivih vrhova}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=14cm]{images/targeted_change_on_bad_vertices_rank_selection_200_249.png}
+\caption{Rang selekcija s ciljanom mutacijom krivih vrhova}
+\label{fig:rank selekcija ciljana random rezultati}
+\end{figure}
+
+Iz rezultata sa slike \ref{fig:rank selekcija ciljana random rezultati}  vidimo da je algoritam postigao točnost od preko 91.5\%. U samo jednom slučaju je pogriješio za 4 ili više, a u preostalim je slučajevima pogriješio samo za jednu boju više.
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=15cm]{images/chart_rezultata_veliki_dataset.png}
+\caption{Grafikon točnosti algoritama na većem skupu podataka}
+\label{fig:grafikon na vecem skupu podataka}
+\end{figure}
+
+Iz grafikona sa slike \ref{fig:grafikon na vecem skupu podataka} vidimo da su točnosti algoritama vrlo blizu. Selekcija stabilnog stanja s kombinacijom funkcija mutacije postigla je najlošiji rezultat, a rang selekcija s ciljanom mutacijom krivih vrhova najbolji.
 
 \chapter{Zaključak}
-Zaključak.
+Dobiveni rezultati ukazuju na uspješnost korištenja genetskih algoritama za rješavanje problema bojanja grafa.
+
+Kao najbolja kombinacija parametara pokazala se rang selekcija kao strategija odabira roditelja i kombinirana funkcija mutacije ili ciljana mutacija krivih vrhova kao strategije mutacije (slike \ref{fig:grafikon tocnosti najboljih varijacija algoritama}, \ref{fig:grafikon na vecem skupu podataka}). Kombinirana funkcija mutacije pokazala se nešto boljom na manjem skupu podataka, a ciljana mutacija krivih vrhova kao najbolja strategija mutacije na većem skupu podataka.
+
+Mogući razlog uspješnosti ovih strategija je što uz davanje prednosti boljim jedinkama pri razmnožavanju, ciljano mijenjaju gene tako da se oni vrhovi koji su pravilno obojani ne mijenjaju. Strategija selekcije stabilnog stanja nije toliko uspješna jer se po generaciji generira manji broj novih jedinki i na taj način se sporije pretražuje prostor. Budući da je broj iteracija bio limitiran na 1000, takva se strategija nije uspjela proširiti po prostoru dovoljno brzo i pronaći optimalno rješenje prije limita.
+
+Najlošije rezultate postigle su strategije koje su se oslanjale na slučajnost (slika \ref{fig:grafikon tocnosti algoritama slucajne selekcije}). Slučajna strategija odabira roditelja pokazala se inferiornijom naspram ostalih strategija biranja roditelja, baš kao i slučajna mutacija gena naspram ostalih strategija mutacije. Razlog je što kod odabira roditelja bolje jedinke nisu dobile prednost, djeca su naslijedila gene od slučajnih roditelja te tako samo rješenje nije konvergiralo prema optimumu. Kod slučajne mutacije gena, problem je što su geni za ovaj specifičan problem unutar jedinki zavisni. Na taj se način moglo dogoditi da su neki već dobro postavljeni geni postali krivo postavljeni, bilo zbog vlastite mutacije ili mutacije susjeda.
+
+Iako su za neke generalne probleme slučajne strategije u sklopu genetskih algoritama korisne, za specifičan problem poput bojanja grafa bolje su se pokazale usmjerene strategije koje uz neku heuristiku ciljano mijenjaju i biraju vrijednosti za sljedeću generaciju.
 
 \bibliography{literatura}
 \bibliographystyle{fer}
