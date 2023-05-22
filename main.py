@@ -26,6 +26,80 @@ def print_total_score(scores, total):
     print(f"[ERROR >= 4]    off_by_four_or_more / total     = {scores[4]} / {total} ({round(scores[4]*100/total, 2)}%)")
 
 
+def run(graph, fitness_func, mutation_func, parent_selection_func, draw_colored_graph):
+    k = graph.maximum_degree + 1
+    lowest_found = float("inf")
+    highest_not_chromatic = graph.chromatic_number - 1
+    previous_solution = None
+    k_found = True
+    while True:
+        # # the optimal solution has been found
+        # if k <= graph.chromatic_number - 1:
+        #     print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
+        #                         graph.number_of_vertices, graph.number_of_edges)
+        #     scores[0] += 1
+        #     # TODO take a screenshot of a graph that it did not manage to color
+        #     if draw_colored_graph:
+        #         graph.draw(previous_solution)
+        #     break
+
+        if k == highest_not_chromatic:
+            if draw_colored_graph:
+                graph.draw(previous_solution)
+
+            return lowest_found
+
+        ga_instance = pygad.GA(num_generations=1000,
+                            num_parents_mating=2,
+                            fitness_func=fitness_func,
+                            sol_per_pop=50,
+                            num_genes=len(graph.adjacency_list),
+                            gene_type=int,
+                            init_range_low=1,
+                            init_range_high=k,
+                            mutation_probability=0.2,
+                            crossover_type="single_point",
+                            mutation_type=mutation_func,
+                            parent_selection_type=parent_selection_func,
+                            keep_elitism=1,
+                            stop_criteria=f"reach_0")
+        ga_instance.run()
+        solution, solution_fitness, solution_idx = ga_instance.best_solution()
+        k_found = (solution_fitness == 0)
+
+        if k_found:
+            lowest_found = k
+            previous_solution = solution
+        else:
+            highest_not_chromatic = k
+        if not k_found and lowest_found == float("inf"):
+            return -1
+
+        k = int((lowest_found + highest_not_chromatic) / 2)
+
+
+        # if solution_fitness < 0:
+        #     print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
+        #                         graph.number_of_vertices, graph.number_of_edges)
+        #     if lowest_found - graph.chromatic_number == 1:
+        #         scores[1] += 1
+        #     elif lowest_found - graph.chromatic_number == 2:
+        #         scores[2] += 1
+        #     elif lowest_found - graph.chromatic_number == 3:
+        #         scores[3] += 1
+        #     else:
+        #         scores[4] += 1
+        #     if draw_colored_graph:
+        #         if previous_solution is not None:
+        #             graph.draw(previous_solution)
+        #         else:
+        #             graph.draw(solution)
+        #     break
+        # previous_solution = solution
+        # lowest_found = k
+        # k -= 1
+
+
 def genetic_search(input_file, draw_colored_graph):
     parser = Parser(input_file)
     parser.parse()
@@ -134,64 +208,67 @@ def genetic_search(input_file, draw_colored_graph):
                     chromosome[vertex] = new_color
             return offspring
 
+        k_found = run(graph, fitness_func, mutation_func, "sss", draw_colored_graph)
+        print(f"Found chromatic number: {k_found}, Real chromatic_number: {graph.chromatic_number}")
+        # # starting value for number of colors is the max_degree + 1
+        # k = graph.maximum_degree + 1
+        # lowest_found = float("inf")
+        # highest_not_k = graph.chromatic_number - 1
+        # total += 1
+        # previous_solution = None
+        # k_found = True
+        # while True:
+        #     # the optimal solution has been found
+        #     if k <= graph.chromatic_number - 1:
+        #         print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
+        #                             graph.number_of_vertices, graph.number_of_edges)
+        #         scores[0] += 1
+        #         # TODO take a screenshot of a graph that it did not manage to color
+        #         if draw_colored_graph:
+        #             graph.draw(previous_solution)
+        #         break
 
-        # starting value for number of colors is the max_degree + 1
-        k = graph.maximum_degree + 1
-        lowest_found = float("inf")
-        total += 1
-        previous_solution = None
-        while True:
-            # the optimal solution has been found
-            if k <= graph.chromatic_number - 1:
-                print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
-                                    graph.number_of_vertices, graph.number_of_edges)
-                scores[0] += 1
-                # TODO take a screenshot of a graph that it did not manage to color
-                if draw_colored_graph:
-                    graph.draw(previous_solution)
-                break
+        #     ga_instance = pygad.GA(num_generations=1000,
+        #                         num_parents_mating=2,
+        #                         fitness_func=fitness_func,
+        #                         sol_per_pop=50,
+        #                         num_genes=len(graph.adjacency_list),
+        #                         gene_type=int,
+        #                         init_range_low=1,
+        #                         init_range_high=k,
+        #                         # mutation_probability=0.2,
+        #                         # mutation_by_replacement=True,
+        #                         # save_best_solutions=True,
+        #                         crossover_type="single_point",
+        #                         mutation_type=mutation_func,
+        #                         parent_selection_type="rank",
+        #                         keep_elitism=1,
+        #                         stop_criteria=f"reach_0")
+        #     ga_instance.run()
+        #     solution, solution_fitness, solution_idx = ga_instance.best_solution()
 
-            ga_instance = pygad.GA(num_generations=1000,
-                                num_parents_mating=2,
-                                fitness_func=fitness_func,
-                                sol_per_pop=50,
-                                num_genes=len(graph.adjacency_list),
-                                gene_type=int,
-                                init_range_low=1,
-                                init_range_high=k,
-                                # mutation_probability=0.2,
-                                # mutation_by_replacement=True,
-                                # save_best_solutions=True,
-                                crossover_type="single_point",
-                                mutation_type=mutation_func,
-                                parent_selection_type="rank",
-                                keep_elitism=1,
-                                stop_criteria=f"reach_0")
-            ga_instance.run()
-            solution, solution_fitness, solution_idx = ga_instance.best_solution()
+        #     if solution_fitness < 0:
+        #         print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
+        #                             graph.number_of_vertices, graph.number_of_edges)
+        #         if lowest_found - graph.chromatic_number == 1:
+        #             scores[1] += 1
+        #         elif lowest_found - graph.chromatic_number == 2:
+        #             scores[2] += 1
+        #         elif lowest_found - graph.chromatic_number == 3:
+        #             scores[3] += 1
+        #         else:
+        #             scores[4] += 1
+        #         if draw_colored_graph:
+        #             if previous_solution is not None:
+        #                 graph.draw(previous_solution)
+        #             else:
+        #                 graph.draw(solution)
+        #         break
+        #     previous_solution = solution
+        #     lowest_found = k
+        #     k -= 1
 
-            if solution_fitness < 0:
-                print_graph_score(graph.chromatic_number, lowest_found, graph.maximum_degree + 1,
-                                    graph.number_of_vertices, graph.number_of_edges)
-                if lowest_found - graph.chromatic_number == 1:
-                    scores[1] += 1
-                elif lowest_found - graph.chromatic_number == 2:
-                    scores[2] += 1
-                elif lowest_found - graph.chromatic_number == 3:
-                    scores[3] += 1
-                else:
-                    scores[4] += 1
-                if draw_colored_graph:
-                    if previous_solution is not None:
-                        graph.draw(previous_solution)
-                    else:
-                        graph.draw(solution)
-                break
-            previous_solution = solution
-            lowest_found = k
-            k -= 1
-
-    print_total_score(scores, total)
+    # print_total_score(scores, total)
 
 
 
