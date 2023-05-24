@@ -134,7 +134,7 @@ def genetic_search(input_file, draw_colored_graph, test_type):
                 graph = parser.next_graph()
                 if not graph:
                     break
-                print(f"SELECTION: {selection_index + 1} / {len(test_combinations)}; ITERATION: {i + 1} / {number_of_iterations}; GRAPH: {parser.i} / {len(parser.graphs)}                                                ", end="\r")
+                print(f"SELECTION: {selection_index + 1} / {len(test_combinations)}; ITERATION: {i + 1} / {number_of_iterations}; GRAPH: {parser.i} / {len(parser.graphs)}")
                 if not graph.chromatic_number:
                     continue
 
