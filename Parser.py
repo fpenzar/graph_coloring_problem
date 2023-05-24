@@ -69,3 +69,11 @@ class Parser:
         else:
             self.i += 1
             return self.graphs[self.i - 1]
+    
+
+    def progress(self):
+        return f"{self.i} / {len(self.graphs)} "
+    
+
+    def reset(self):
+        self.i = 0
