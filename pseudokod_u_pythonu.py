@@ -149,15 +149,15 @@ def mutiraj(djeca):
 def genetski_algoritam(broj_iteracija, limit_dobrote, velicina_populacije):
     populacija = generiraj_pocetnu_populaciju(velicina_populacije)
     for _ in range(broj_iteracija):
-        najbolja_dobrota, jednika_s_najboljom_dobrotom = maksimalna_dobrota(populacija)
+        najbolja_dobrota, najbolja_jedinka = maksimalna_dobrota(populacija)
         if najbolja_dobrota >= limit_dobrote:
-            return True, jednika_s_najboljom_dobrotom
+            return True, najbolja_jedinka
         
         roditelji = izaberi_roditelje(populacija)
         djeca = krizanje(roditelji)
         populacija = mutiraj(djeca)
 
-    return False, jednika_s_najboljom_dobrotom
+    return False, najbolja_jedinka
 
 
 def slucajna_mutacija_na_krivim_vrhovima(djeca, matrica_susjedstva, k):
